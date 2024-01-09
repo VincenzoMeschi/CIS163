@@ -26,28 +26,27 @@ max_sum_sorted_subseq 	function 	function to compute max sum of sorted subsequen
 """
 # [1,2,3,4,5,6,7,8]
 
+
 def max_sum_sorted_subseq(lst):
-  if len(lst) > 1:
-    totalSum = 0
-    tempSum = lst[0]
+    if len(lst) > 1:
+        totalSum = 0
+        tempSum = lst[0]
 
-    pointA = 1
+        pointA = 1
 
-    while pointA < len(lst):
-      if lst[pointA] > lst[pointA - 1]:
-        tempSum += lst[pointA]
-      else:
-        totalSum = max(totalSum, tempSum)
-        tempSum = lst[pointA]
-      pointA += 1
-    
-    return max(totalSum, tempSum)
-  elif len(lst) == 1:
-    return lst[0]
-  else:
-    return 0
+        while pointA < len(lst):
+            if lst[pointA] > lst[pointA - 1]:
+                tempSum += lst[pointA]
+            else:
+                totalSum = max(totalSum, tempSum)
+                tempSum = lst[pointA]
+            pointA += 1
 
-print(max_sum_sorted_subseq([3,4,6,25,2,20,23]))
+        return max(totalSum, tempSum)
+    elif len(lst) == 1:
+        return lst[0]
+    else:
+        return 0
 
 
-
+print(max_sum_sorted_subseq([3, 4, 6, 25, 2, 20, 23]))
