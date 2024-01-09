@@ -18,24 +18,22 @@ Name 	Type 	Description
 check_anagram 	function 	function to check if two strings are anagrams
 """
 
+
 def check_anagram(word1: str, word2: str) -> bool:
-  if len(word1) != len(word2):
-    return False
+    if len(word1) != len(word2):
+        return False
 
-  book = {}
-  word1, word2 = set(word1), set(word2)
+    book = {}
+    word1, word2 = set(word1), set(word2)
 
-  for letter in word1:
-    book[letter] = 0
+    for letter in word1:
+        book[letter] = 0
 
-  for letter in word2:
-    book[letter] += 1
+    for letter in word2:
+        book[letter] += 1
 
-  for val in book:
-    if book[val] != 1:
-      return False
+    for val in book:
+        if book[val] != 1:
+            return False
 
-  return True
-
-
-  
+    return True
