@@ -24,8 +24,3 @@ def acronym_creator(str1):
             total += word[0]
 
     return total
-
-
-print(acronym_creator("Grand Valley State Computing club Of the World"))
-# 65 - 90
-    
