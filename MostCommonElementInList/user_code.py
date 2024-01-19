@@ -21,6 +21,7 @@ Name 	Type 	Description
 most_common_element 	function 	function to determine most common element
 """
 
+
 def most_common_element(lst):
     counter = {}
     max_count = 0
