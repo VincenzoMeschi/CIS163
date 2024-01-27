@@ -12,5 +12,11 @@ Extra Information:
   Version: Python 3.10.12 (python3 --version)
 """
 
-class MiddleSquare:
+# print(int(str(5655).zfill(10)))
 
+
+x = str(10).zfill(10)
+
+x = int(x)
+
+print(x)
