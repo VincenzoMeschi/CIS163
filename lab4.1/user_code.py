@@ -57,7 +57,7 @@ class Customer:
         total = sum(self.get_transactions())
         if total < 0:
             if isinstance(self, VIP):
-                print(f"{self.get_title()}{self.get_name()}, would you please remit payment at your earliest convenience.")
+                print(f"{self.get_title()} {self.get_name()}, would you please remit payment at your earliest convenience.")
             else:
                 print(f"{self.get_name()}, pay your balance immediately!")
         
