@@ -92,7 +92,7 @@ class LinearCongruential:
 
 
 class LaggedFibonacci:
-    def __init__(self, seed: list[int], j: int, k: int, m: int) -> None:
+    def __init__(self, seed, j: int, k: int, m: int) -> None:
         self.__state = dict()
         if isinstance(seed, list) and all(isinstance(item, int) for item in seed):
             self.__state["val"] = seed
@@ -162,16 +162,17 @@ class Acorn:
 
     def __next__(self):
         state = self.__state
+        new_vals = state["vals"].copy()
 
-        for i in range(len(state["vals"]) - 1):
-            state["vals"][i + 1] = (state["vals"][i] + state["vals"][i + 1]) % state[
-                "M"
-            ]
+        for i in range(1, len(state["vals"])):
+            new_vals[i] = (new_vals[i - 1] + new_vals[i]) % state["M"]
 
-        if state["vals"] == self.start:
+        if new_vals == self.start:
             raise StopIteration()
 
-        return state["vals"]
+        state["vals"] = new_vals
+
+        return new_vals
 
     def get_state(self) -> dict:
         return self.__state.copy()
@@ -182,3 +183,80 @@ class Acorn:
             self.start = state["vals"]
         else:
             raise ValueError("Invalid dictionary. Must include keys vals, M")
+
+
+class Analyzer:
+    def __init__(self, rand_num_gen: object) -> None:
+        self.rand_num_gen = rand_num_gen
+        self.max = float("-inf")
+        self.min = float("inf")
+        self.average = 0.0
+        self.period = 0
+        self.bit_freqs = []
+
+    def analyze(self, max_nums=1e10):
+        nums = []
+        total, count, acorn_period_count = 0, 0, 0
+        is_acorn = False
+
+        for num in self.rand_num_gen:
+            if isinstance(num, int):
+                if count >= max_nums:
+                    break
+
+                nums.append(num)
+                total += num
+                count += 1
+            elif isinstance(num, list):
+                is_acorn = True
+                acorn_period_count += 1
+                for i, j in enumerate(num):
+                    if i != 0:
+                        nums.append(j)
+                        total += j
+                        count += 1
+            else:
+                raise TypeError("Random number generator must return int or list[int]")
+
+        self.max = max(nums)
+        self.min = min(nums)
+        self.average = total / count if count > 0 else 0
+        print(f"{self.average} == {total} / {count}")
+        if is_acorn:
+            self.period = min(max_nums, acorn_period_count)
+        else:
+            self.period = min(max_nums, count)
+
+        bit_length = len(bin(self.max)) - 2
+
+        self.bit_freqs = [0 for _ in range(bit_length)]
+
+        # bit_freqs
+        for num in nums:
+            if isinstance(num, int):
+                temp = bin(num)[2:].zfill(bit_length)
+                for i, j in enumerate(temp):
+                    if j == "1":
+                        self.bit_freqs[i] += 1
+            elif isinstance(num, list):
+                for i in range(1, len(num)):
+                    temp = bin(num[i])[2:].zfill(bit_length)
+                    for i, j in enumerate(temp):
+                        if j == "1":
+                            self.bit_freqs[i] += 1
+
+
+a = Acorn([7, 6, 8, 11, 5], 23)
+
+
+analyzer = Analyzer(a)
+
+analyzer.analyze()
+
+print(analyzer.max)
+print(analyzer.min)
+print(analyzer.average)
+print(analyzer.period)
+print(analyzer.bit_freqs)
+
+print("============================")
