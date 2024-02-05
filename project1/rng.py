@@ -254,7 +254,7 @@ class LaggedFibonacci:
             raise ValueError("Param M must be an integer")
 
         # Validate the value of j and k so that k is less than the length of the seed and j is greater than 0 and less than k
-        if len(str(k)) < len(seed):
+        if k < len(seed):
             self.__state["k"] = k
             if j > 0 and j < k:
                 self.__state["j"] = j
@@ -546,7 +546,7 @@ lcg_seed = 1999
 lcg_a = 42
 lcg_c = 99
 lcg_m = 532321
-lf_seed = [6, 4, 2, 1, 8, 9, 3]
+lf_seed = [6, 4, 2, 1, 8, 9, 3, 4]
 lf_j = 3
 lf_k = 7
 lf_m = 10
