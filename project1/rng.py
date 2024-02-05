@@ -253,15 +253,15 @@ class LaggedFibonacci:
         else:
             raise ValueError("Param M must be an integer")
 
-        # Validate the value of j and k so that k is less than the length of the seed and j is greater than 0 and less than k
-        if k < len(seed):
+        # Validate the value of j and k so that k is less than or equal to the length of the seed and j is greater than 0 and less than k
+        if k <= len(seed):
             self.__state["k"] = k
             if j > 0 and j < k:
                 self.__state["j"] = j
             else:
                 raise ValueError("Param J must be greater than 0 and less than k")
         else:
-            raise ValueError("Param k's length must be less than the length of seed")
+            raise ValueError("Param k must be less than or equal to the length of seed")
 
     def __iter__(self):
         # Return self, as the __next__ method is implemented in the class.
@@ -291,6 +291,8 @@ class LaggedFibonacci:
         # If the generator has reached the initial seed state, raise a StopIteration
         if self.__state["val"] == self.seed:
             raise StopIteration()
+
+        print(self.__state["val"])
 
         # Return the generated number
         return number
@@ -541,17 +543,17 @@ class Analyzer:
 # ===========================================================
 
 # Initialize the seeds and parameters for the random number generators
-ms_seed = 123432
-lcg_seed = 1999
-lcg_a = 42
-lcg_c = 99
-lcg_m = 532321
-lf_seed = [6, 4, 2, 1, 8, 9, 3, 4]
+ms_seed = 17628322
+lcg_seed = 2932
+lcg_a = 21
+lcg_c = 55
+lcg_m = 359828
+lf_seed = [1,2,3,4,5,6,7,8,9,1,0]
 lf_j = 3
 lf_k = 7
 lf_m = 10
-ac_seed = [1, 2, 3, 4, 5]
-ac_M = 100
+ac_seed = [2, 3, 4, 5, 6]
+ac_M = 178
 
 # Initialize the random number generators
 ms = MiddleSquare(ms_seed)
