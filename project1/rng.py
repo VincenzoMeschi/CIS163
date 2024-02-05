@@ -12,8 +12,6 @@ Extra Information:
   Version: Python 3.10.12 (python3 --version)
 """
 
-# print(int(str(5655).zfill(10)))
-
 
 class MiddleSquare:
     def __init__(self, seed: int) -> None:
@@ -196,67 +194,55 @@ class Analyzer:
 
     def analyze(self, max_nums=1e10):
         nums = []
-        total, count, acorn_period_count = 0, 0, 0
-        is_acorn = False
+        count = 0
 
         for num in self.rand_num_gen:
             if isinstance(num, int):
-                if count >= max_nums:
+                if count > max_nums:
                     break
 
                 nums.append(num)
-                total += num
                 count += 1
             elif isinstance(num, list):
-                is_acorn = True
-                acorn_period_count += 1
+                if count > max_nums:
+                    break
+                count += 1
                 for i, j in enumerate(num):
                     if i != 0:
                         nums.append(j)
-                        total += j
-                        count += 1
             else:
                 raise TypeError("Random number generator must return int or list[int]")
 
         self.max = max(nums)
         self.min = min(nums)
-        self.average = total / count if count > 0 else 0
-        print(f"{self.average} == {total} / {count}")
-        if is_acorn:
-            self.period = min(max_nums, acorn_period_count)
-        else:
-            self.period = min(max_nums, count)
+        self.average = sum(nums) / len(nums) if len(nums) > 0 else 0
+        print(f"{self.average} == {sum(nums)} / {len(nums)}")
+        self.period = min(max_nums, count)
 
-        bit_length = len(bin(self.max)) - 2
+        bit_length = self.max.bit_length()
 
         self.bit_freqs = [0 for _ in range(bit_length)]
 
         # bit_freqs
         for num in nums:
-            if isinstance(num, int):
-                temp = bin(num)[2:].zfill(bit_length)
-                for i, j in enumerate(temp):
-                    if j == "1":
-                        self.bit_freqs[i] += 1
-            elif isinstance(num, list):
-                for i in range(1, len(num)):
-                    temp = bin(num[i])[2:].zfill(bit_length)
-                    for i, j in enumerate(temp):
-                        if j == "1":
-                            self.bit_freqs[i] += 1
+            temp = list(bin(num)[2:].zfill(bit_length))
+            temp.reverse()
+            for i, j in enumerate(temp):
+                if j == "1":
+                    self.bit_freqs[i] += 1
 
 
-a = Acorn([7, 6, 8, 11, 5], 23)
+# a = Acorn([7, 6, 8, 11, 5], 23)
 
 
-analyzer = Analyzer(a)
+# analyzer = Analyzer(a)
 
-analyzer.analyze()
+# analyzer.analyze()
 
-print(analyzer.max)
-print(analyzer.min)
-print(analyzer.average)
-print(analyzer.period)
-print(analyzer.bit_freqs)
+# print(analyzer.max)
+# print(analyzer.min)
+# print(analyzer.average)
+# print(analyzer.period)
+# print(analyzer.bit_freqs)
 
-print("============================")
+# print("============================")
