@@ -194,28 +194,37 @@ class Analyzer:
 
     def analyze(self, max_nums=1e10):
         nums = []
-        count = 0
+        acorn_period = 0
+        is_acorn = False
 
         for num in self.rand_num_gen:
-            if isinstance(num, int):
-                if count > max_nums:
-                    break
-                nums.append(num)
-            elif isinstance(num, list):
-                if count > max_nums:
-                    break
-                for i, j in enumerate(num):
-                    if i != 0:
-                        nums.append(j)
-            else:
-                raise TypeError("Random number generator must return int or list[int]")
+            if len(nums) >= max_nums:
+                break
+            try:
+                if isinstance(num, int):
+                    nums.append(num)
+                elif isinstance(num, list):
+                    is_acorn = True
+                    acorn_period += 1
+                    for i, j in enumerate(num):
+                        if isinstance(j, int):
+                            if i != 0:
+                                nums.append(j)
+                        else:
+                            raise TypeError()
+                else:
+                    raise TypeError()
+            except TypeError:
+                return "Random number generator must return int or list[int]"
+            
+        if not nums:
+            return "No valid numbers found."
 
-            count += 1
 
         self.max = max(nums)
         self.min = min(nums)
         self.average = sum(nums) / len(nums) if len(nums) > 0 else 0
-        self.period = min(max_nums, count)
+        self.period = len(nums) if not is_acorn else acorn_period
 
         bit_length = self.max.bit_length()
 
@@ -224,36 +233,58 @@ class Analyzer:
         # bit_freqs
         for num in nums:
             temp = bin(num)[2:].zfill(bit_length)
-            for i, j in reversed(list(enumerate(temp))):
+            temp = [*temp][::-1]
+            for i, j in enumerate(temp):
                 if j == "1":
                     self.bit_freqs[i] += 1
-        self.bit_freqs.reverse()
+                    
+ms_seed = 123432
+lcg_seed = 1999
+lcg_a = 42
+lcg_c = 99
+lcg_m = 532321
+lf_seed = [6, 4, 2, 1, 8, 9, 3]
+lf_j = 3
+lf_k = 7
+lf_m = 10  
+ac_seed = [1, 2, 3, 4, 5]
+ac_M = 100
 
 
-# ms_seed = 158397
-# lcg_seed = 84
-# lcg_a = 8959356
-# lcg_c = 446893
-# lcg_m = 4300763
-# lf_seed = [12, 35, 48, 62, 89, 102, 142]
-# lf_j = 3
-# lf_k = 7
-# lf_m = 10
-# ac_seed = [1, 2, 3, 4, 5]
-# ac_M = 478
+ms = MiddleSquare(ms_seed)
+lcg = LinearCongruential(lcg_seed, lcg_a, lcg_c, lcg_m)
+lf = LaggedFibonacci(lf_seed, lf_j, lf_k, lf_m)
+ac = Acorn(ac_seed, ac_M)
 
+ms_analyzer = Analyzer(ms)
+lcg_analyzer = Analyzer(lcg)
+lf_analyzer = Analyzer(lf)
+ac_analyzer = Analyzer(ac)
 
-# a = Acorn([7, 6, 8, 11, 5], 20)
-
-
-# analyzer = Analyzer(a)
-
-# analyzer.analyze()
-
-# print(analyzer.max)
-# print(analyzer.min)
-# print(analyzer.average)
-# print(analyzer.period)
-# print(analyzer.bit_freqs)
-
-# print("============================")
+ms_analyzer.analyze()
+print(ms_analyzer.max)
+print(ms_analyzer.min)
+print(ms_analyzer.average)
+print(ms_analyzer.period)
+print(ms_analyzer.bit_freqs)
+print("=======")
+lcg_analyzer.analyze()
+print(lcg_analyzer.max)
+print(lcg_analyzer.min)
+print(lcg_analyzer.average)
+print(lcg_analyzer.period)
+print(lcg_analyzer.bit_freqs)
+print("=======")
+lf_analyzer.analyze()
+print(lf_analyzer.max)
+print(lf_analyzer.min)
+print(lf_analyzer.average)
+print(lf_analyzer.period)
+print(lf_analyzer.bit_freqs)
+print("=======")
+ac_analyzer.analyze()
+print(ac_analyzer.max)
+print(ac_analyzer.min)
+print(ac_analyzer.average)
+print(ac_analyzer.period)
+print(ac_analyzer.bit_freqs)
