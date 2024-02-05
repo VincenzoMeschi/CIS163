@@ -200,23 +200,21 @@ class Analyzer:
             if isinstance(num, int):
                 if count > max_nums:
                     break
-
                 nums.append(num)
-                count += 1
             elif isinstance(num, list):
                 if count > max_nums:
                     break
-                count += 1
                 for i, j in enumerate(num):
                     if i != 0:
                         nums.append(j)
             else:
                 raise TypeError("Random number generator must return int or list[int]")
 
+            count += 1
+
         self.max = max(nums)
         self.min = min(nums)
         self.average = sum(nums) / len(nums) if len(nums) > 0 else 0
-        print(f"{self.average} == {sum(nums)} / {len(nums)}")
         self.period = min(max_nums, count)
 
         bit_length = self.max.bit_length()
@@ -225,14 +223,27 @@ class Analyzer:
 
         # bit_freqs
         for num in nums:
-            temp = list(bin(num)[2:].zfill(bit_length))
-            temp.reverse()
-            for i, j in enumerate(temp):
+            temp = bin(num)[2:].zfill(bit_length)
+            for i, j in reversed(list(enumerate(temp))):
                 if j == "1":
                     self.bit_freqs[i] += 1
+        self.bit_freqs.reverse()
 
 
-# a = Acorn([7, 6, 8, 11, 5], 23)
+# ms_seed = 158397
+# lcg_seed = 84
+# lcg_a = 8959356
+# lcg_c = 446893
+# lcg_m = 4300763
+# lf_seed = [12, 35, 48, 62, 89, 102, 142]
+# lf_j = 3
+# lf_k = 7
+# lf_m = 10
+# ac_seed = [1, 2, 3, 4, 5]
+# ac_M = 478
+
+
+# a = Acorn([7, 6, 8, 11, 5], 20)
 
 
 # analyzer = Analyzer(a)
