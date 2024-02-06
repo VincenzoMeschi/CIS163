@@ -292,8 +292,6 @@ class LaggedFibonacci:
         if self.__state["val"] == self.seed:
             raise StopIteration()
 
-        print(self.__state["val"])
-
         # Return the generated number
         return number
 
@@ -481,6 +479,8 @@ class Analyzer:
             if len(nums) >= max_nums:
                 break
 
+            print(len(nums))
+
             try:
                 # If num is an integer (rand_num_gen is not Acorn), append it to the list of numbers
                 if isinstance(num, int):
@@ -548,10 +548,10 @@ lcg_seed = 2932
 lcg_a = 21
 lcg_c = 55
 lcg_m = 359828
-lf_seed = [1,2,3,4,5,6,7,8,9,1,0]
-lf_j = 3
-lf_k = 7
-lf_m = 10
+lf_seed = [31, 42, 46, 98, 63, 21, 99, 83, 72, 75, 12]
+lf_j = 4
+lf_k = 8
+lf_m = 100
 ac_seed = [2, 3, 4, 5, 6]
 ac_M = 178
 
