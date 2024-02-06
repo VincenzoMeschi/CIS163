@@ -479,8 +479,6 @@ class Analyzer:
             if len(nums) >= max_nums:
                 break
 
-            print(len(nums))
-
             try:
                 # If num is an integer (rand_num_gen is not Acorn), append it to the list of numbers
                 if isinstance(num, int):
