@@ -1,20 +1,36 @@
-def tester(func):
-    def wrapper(*args):
-        print(f"Addition called with args {args}")
-        result = func(*args)
-        print(f"Result: {result}")
-        return result
-
-    return wrapper
+from abc import ABC, abstractmethod
 
 
-@tester
-def add(a: int, b: int) -> int:
-    return a + b
+class Cup(ABC):
+    
+    @abstractmethod
+    def drink_all(self):
+        pass
 
 
-a = add(1, 2)
+    @abstractmethod
+    def fill(self, amount):
+        pass
 
-b = add(a, 3)
+    @abstractmethod
+    def get_contents(self):
+        pass
 
-print(a, b)
+class Coffee(Cup):
+    def __init__(self, contents) -> None:
+        self.contents = contents
+        self.amount_in_oz = 16
+
+    def get_contents(self):
+        return self.contents
+    
+    def drink_all(self):
+        self.amount_in_oz = 0
+
+    def fill(self, amount):
+        self.amount_in_oz = amount
+        if amount > 16:
+            print(f"Cup has overflown! Now contains {amount} ounces of {self.contents}")
+
+
+
