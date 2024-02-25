@@ -1,6 +1,7 @@
 from chess_piece import ChessPiece
 from move import Move
 from typing import List
+from player import Player
 
 
 class Pawn(ChessPiece):
@@ -16,11 +17,11 @@ class Pawn(ChessPiece):
             return False
 
         # If the pawn is white
-        if self.player == 0:
+        if self.player == Player.WHITE:
             # if pawn is moving forward and not taking
             if move.from_col == move.to_col:
                 # if pawn is moving forward 1 space
-                if move.to_row - move.from_row == -1:
+                if move.from_row - move.to_row == 1:
                     # if the space is empty
                     if board[move.to_row][move.to_col] is None:
                         return True
@@ -33,20 +34,20 @@ class Pawn(ChessPiece):
                     ):
                         return True
 
-                # if pawn is taking
+            # if pawn is taking
+            elif (
+                abs(move.from_col - move.to_col) == 1
+                and move.from_row - move.to_row == 1
+            ):
+                # if the piece belongs to the other player
                 if (
-                    abs(move.from_col - move.to_col) == 1
-                    and move.from_row - move.to_row == 1
+                    board[move.to_row][move.to_col] is not None
+                    and board[move.to_row][move.to_col].player == Player.BLACK
                 ):
-                    # if the piece belongs to the other player
-                    if (
-                        board[move.to_row][move.to_col] is not None
-                        and board[move.to_row][move.to_col].player == 1
-                    ):
-                        return True
+                    return True
 
         # If the pawn is black
-        elif self.player == 1:
+        elif self.player == Player.BLACK:
             # if pawn is moving forward and not taking
             if move.from_col == move.to_col:
                 # if pawn is moving forward 1 space
@@ -70,7 +71,7 @@ class Pawn(ChessPiece):
                 # if the piece belongs to the other player
                 if (
                     board[move.to_row][move.to_col] is not None
-                    and board[move.to_row][move.to_col].player == 0
+                    and board[move.to_row][move.to_col].player == Player.WHITE
                 ):
                     return True
 

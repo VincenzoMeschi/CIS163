@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 """Lab 6.1 - Abstract Classes
 
-Vincenzo Meschi and Anic Huric
+Vincenzo Meschi and Anis Huric
 """
 
 class Pet(ABC):
