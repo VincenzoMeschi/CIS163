@@ -37,3 +37,14 @@ def remove_dupe(string: str) -> str:
 
 
 print(remove_dupe("allStar"))
+
+
+def triangle(num_rows: int):
+    if num_rows == 1:
+        return 1
+    elif num_rows < 1:
+        raise ValueError("Num rows must be greater than 0")
+    return num_rows + triangle(num_rows - 1)
+
+
+print(triangle(5))
