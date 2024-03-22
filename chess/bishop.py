@@ -10,7 +10,7 @@ class Bishop(ChessPiece):
         return "B"
     
     def type(self) -> str:
-        return "bishop"
+        return "Bishop"
     
     def is_valid_move(self, move: Move, board: List[List["ChessPiece"]]) -> bool:
         if not super().is_valid_move(move, board):

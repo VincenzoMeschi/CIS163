@@ -35,10 +35,6 @@ class ChessPiece(ABC):
         if move.to_row < 0 or move.to_row > 7 or move.to_col < 0 or move.to_col > 7:
             return False
 
-        # Makes sure the initial and final moves are different
-        if move.from_row == move.to_row and move.from_col == move.to_col:
-            return False
-
         # Makes sure the initial piece moves to a location other than start
         if board[move.from_row][move.from_col] != self:
             return False

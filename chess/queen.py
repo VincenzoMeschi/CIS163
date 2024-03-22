@@ -10,7 +10,7 @@ class Queen(ChessPiece):
         return "Q"
     
     def type(self) -> str:
-        return "queen"
+        return "Queen"
     
     def is_valid_move(self, move: Move, board: List[List[ChessPiece]]) -> bool:
         if not super().is_valid_move(move, board):
