@@ -22,17 +22,30 @@ class ChessPiece(ABC):
         pass
 
     def is_valid_move(self, move: Move, board: List[List["ChessPiece"]]) -> bool:
+        # Check if either to_row or to_col is None
+        if move.to_row is None or move.to_col is None:
+            return False
+
         # Makes sure the initial piece is within the bounds of the board
         if (
-            move.from_row < 0
-            or move.from_row > 7
-            or move.from_col < 0
-            or move.from_col > 7
+                move.to_row < 0
+                or move.to_row > 7
+                or move.to_col < 0
+                or move.to_col > 7
         ):
             return False
 
         # Makes sure the final move is within the bounds of the board
-        if move.to_row < 0 or move.to_row > 7 or move.to_col < 0 or move.to_col > 7:
+        if (
+            move.to_row < 0
+            or move.to_row > 7
+            or move.to_col < 0
+            or move.to_col > 7
+        ):
+            return False
+
+        # Makes sure the initial and final moves are different
+        if move.from_row == move.to_row and move.from_col == move.to_col:
             return False
 
         # Makes sure the initial piece moves to a location other than start
