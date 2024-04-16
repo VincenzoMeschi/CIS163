@@ -74,21 +74,6 @@ class LLStack:
         self.__head = Node(data, self.__head)
         self.__size += 1
 
-    def peek(self) -> tuple:
-        """
-        Returns the data (tuple) stored at the top node in the stack without removing it.
-
-        Returns
-        ----------
-        tuple
-            Data stored at the top node in the stack.
-        """
-
-        if self.__size == 0:
-            raise IndexError("peek from empty stack")
-
-        return self.__head.data
-
     def __str__(self) -> str:
         """
         String representation of LLStack.

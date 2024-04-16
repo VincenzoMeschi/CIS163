@@ -72,9 +72,17 @@ class Maze:
             or grid[exit_loc[0]][exit_loc[1]] == "x"
         ):
             raise InvalidCoordinateError("Invalid exit coordinates.")
+        
+        for row in grid:
+            for cell in row:
+                if not isinstance(cell, str):
+                    raise TypeError
 
         self.__nrows = len(grid)
-        self.__ncols = len(grid[0])
+        if grid:
+            self.__ncols = len(grid[0])
+        else:
+            self.__ncols = 0
         self.__entry = entry_loc
         self.__exit = exit_loc
         self.__grid = grid
@@ -299,24 +307,6 @@ class Maze:
 
         return False
 
-    #  [0/4] testing Maze solve_shortest(): possible mazes with only one path
-
-    #     Max points: 4
-    #     Earned points: 0
-    #     Message
-
-    #     your path does not have the correct number of items
-    #     one of the spots in the path is wrong
-    #     invalid shortest_path for tiny maze
-    #     your path does not have the correct number of items
-    #     one of the spots in the path is wrong
-    #     invalid shortest_path for small maze
-    #     your path does not have the correct number of items
-    #     one of the spots in the path is wrong
-    #     invalid shortest_path for medium maze
-    #     your path does not have the correct number of items
-    #     one of the spots in the path is wrong
-    #     invalid shortest_path for large maze
 
     def solve_shortest(self):
         """
@@ -338,7 +328,7 @@ class Maze:
             self.__shortest_path = LLStack()
             # Push the entry spot to the shortest path
             self.__shortest_path.push(self.entry_coords)
-            self.__create_shortest_path(self.entry_coords, shortest_length, memo)
+            self.__make_shortest_path(self.entry_coords, shortest_length, memo)
             self.__shortest_path.push(self.exit_coords)
 
     def __shortest_path_helper(self, coords, memo):
@@ -386,34 +376,26 @@ class Maze:
         # Remove the coords from the history set
         return shortest
 
-    def __create_shortest_path(self, coords, length, memo):
-        """
-        This method creates the shortest path through the maze
-        :param coords: current set of coords
-        :param length: current length of the path
-        :param memo: current version of the memoization dictionary
-        """
-
-        # Base case: if the length is 0, return
-        if length == 0:
-            return
-
+    def __make_shortest_path(self, coords, length, memo):
         row, col = coords
+        # Check upward movement
+        if self.__path_helper(row - 1, col, length, memo):
+            return True
+        # Check downward movement
+        elif self.__path_helper(row + 1, col, length, memo):
+            return True
+        # Check leftward movement
+        elif self.__path_helper(row, col - 1, length, memo):
+            return True
+        # Check rightward movement
+        elif self.__path_helper(row, col + 1, length, memo):
+            return True
+        # If none of the directions work, return False
+        return False
 
-        # Recursive cases: try to move in all four directions
-        # If the neighbor is in the memoization dictionary and the value is the length - 1, push the neighbor to the shortest path and call the method again
-
-        if (row - 1, col) in memo and memo[(row - 1, col)] == length - 1:
-            self.__shortest_path.push((row - 1, col))
-            self.__create_shortest_path((row - 1, col), length - 1, memo)
-        elif (row + 1, col) in memo and memo[(row + 1, col)] == length - 1:
-            self.__shortest_path.push((row + 1, col))
-            self.__create_shortest_path((row + 1, col), length - 1, memo)
-        elif (row, col - 1) in memo and memo[(row, col - 1)] == length - 1:
-            self.__shortest_path.push((row, col - 1))
-            self.__create_shortest_path((row, col - 1), length - 1, memo)
-        elif (row, col + 1) in memo and memo[(row, col + 1)] == length - 1:
-            self.__shortest_path.push((row, col + 1))
-            self.__create_shortest_path((row, col + 1), length - 1, memo)
-        else:
-            return
+    def __path_helper(self, next_row, next_col, length, memo):
+        if (next_row, next_col) in memo and memo[(next_row, next_col)] == length - 1:
+            self.__shortest_path.push((next_row, next_col))
+            self.__make_shortest_path((next_row, next_col), length - 1, memo)
+            return True
+        return False

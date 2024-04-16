@@ -3,6 +3,45 @@ from maze import Maze, InvalidCoordinateError
 from llstack import LLStack
 
 
+class TestLLStack(unittest.TestCase):
+    def test_init(self):
+        stack = LLStack()
+        self.assertEqual(stack.size, 0)
+
+    def test_size(self):
+        stack = LLStack()
+        stack.push((1, 2))
+        stack.push((3, 4))
+        self.assertEqual(stack.size, 2)
+
+    def test_pop(self):
+        stack = LLStack()
+        stack.push((1, 2))
+        stack.push((3, 4))
+        self.assertEqual(stack.pop(), (3, 4))
+        self.assertEqual(stack.size, 1)
+
+    def test_pop_empty(self):
+        stack = LLStack()
+        with self.assertRaises(IndexError):
+            stack.pop()
+
+    def test_push(self):
+        stack = LLStack()
+        stack.push((1, 2))
+        self.assertEqual(stack.size, 1)
+
+    def test_push_invalid(self):
+        stack = LLStack()
+        with self.assertRaises(TypeError):
+            stack.push(1)
+
+    def test_str(self):
+        stack = LLStack()
+        stack.push((1, 2))
+        stack.push((3, 4))
+        self.assertEqual(str(stack), "(3,4) -> (1,2)")
+    
 class TestMaze(unittest.TestCase):
     # Valid grid must be 3x3 minimum.
 
@@ -26,7 +65,7 @@ class TestMaze(unittest.TestCase):
         grid = "invalid"
         entry = (0, 0)
         exit = (2, 2)
-        with self.assertRaises(TypeError):
+        with self.assertRaises(ValueError):
             Maze(grid, entry, exit)
 
     def test_init_invalid_entry(self):
@@ -57,7 +96,7 @@ class TestMaze(unittest.TestCase):
             ["o", "x", "o"],
             ["o", "o", "o"],
         ]
-        entry = (0, 1)
+        entry = (1, 1)
         exit = (2, 2)
         with self.assertRaises(InvalidCoordinateError):
             Maze(grid, entry, exit)
@@ -69,7 +108,7 @@ class TestMaze(unittest.TestCase):
             ["o", "o", "o"],
         ]
         entry = (0, 0)
-        exit = (2, 1)
+        exit = (1, 1)
         with self.assertRaises(InvalidCoordinateError):
             Maze(grid, entry, exit)
 
@@ -130,7 +169,8 @@ class TestMaze(unittest.TestCase):
         entry = (0, 0)
         exit = (2, 2)
         maze = Maze(grid, entry, exit)
-        self.assertEqual(maze.entry_coords, (0, 0))
+        maze.entry_coords = (0, 2)
+        self.assertEqual(maze.entry_coords, (0, 2))
 
     def test_entry_coords_invalid(self):
         grid = [
@@ -138,11 +178,11 @@ class TestMaze(unittest.TestCase):
             ["o", "x", "o"],
             ["o", "o", "o"],
         ]
-        entry = (1, 1)
+        entry = (0, 0)
         exit = (2, 2)
         maze = Maze(grid, entry, exit)
         with self.assertRaises(InvalidCoordinateError):
-            maze.entry_coords = "invalid"
+            maze.entry_coords = (1, 1)
 
     def test_entry_coords_invalid_coords(self):
         grid = [
@@ -165,7 +205,8 @@ class TestMaze(unittest.TestCase):
         entry = (0, 0)
         exit = (2, 2)
         maze = Maze(grid, entry, exit)
-        self.assertEqual(maze.exit_coords, (2, 2))
+        maze.exit_coords = (1, 2)
+        self.assertEqual(maze.exit_coords, (1, 2))
 
     def test_exit_coords_invalid(self):
         grid = [
@@ -174,7 +215,7 @@ class TestMaze(unittest.TestCase):
             ["o", "o", "o"],
         ]
         entry = (0, 0)
-        exit = (1, 1)
+        exit = (2, 2)
         maze = Maze(grid, entry, exit)
         with self.assertRaises(InvalidCoordinateError):
             maze.exit_coords = (1, 1)
